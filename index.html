@@ -284,10 +284,26 @@
             animation: flyHug 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
+        /* Text Utilities */
+        .text-medium { font-size: 1.1rem; }
+        .text-small { font-size: 1.05rem; }
+        .text-highlight { font-size: 1.05rem; font-weight: 600; color: #d6336c; }
+        .text-bold { font-weight: 600; font-size: 1.2rem; }
+        .text-italic { font-style: italic; }
+        .title-medium { font-size: 1.8rem; }
+        .title-large { font-size: 2rem; color: #ff0055; }
+        
         /* Responsive adjustments */
         @media (max-width: 600px) {
             h1 { font-size: 2rem; margin-bottom: 10px; }
             p { font-size: 0.95rem; margin-bottom: 15px; }
+            .title-medium { font-size: 1.5rem; }
+            .title-large { font-size: 1.7rem; }
+            .text-medium { font-size: 1rem; }
+            .text-small { font-size: 0.9rem; }
+            .text-highlight { font-size: 0.95rem; }
+            .text-bold { font-size: 1rem; }
+            
             .btn { font-size: 0.95rem; padding: 10px 22px; margin: 5px; }
             .container { 
                 padding: 25px 20px; 
@@ -311,6 +327,8 @@
 
         @media (max-width: 360px) {
             h1 { font-size: 1.6rem; }
+            .title-medium { font-size: 1.3rem; }
+            .title-large { font-size: 1.5rem; }
             .btn { width: 90%; max-width: 200px; }
             .action-buttons { height: 180px; }
         }
@@ -389,31 +407,31 @@
         <!-- SCREEN 1: Intro -->
         <div id="screen1" class="screen active">
             <h1>Hai, <span id="namaDia1"></span> ❤️</h1>
-            <p style="font-size: 1.1rem;">Mungkin kamu bingung kenapa aku kirim ini...</p>
-            <p style="font-size: 1.1rem;">Tapi tolong baca sampai habis ya.</p>
+            <p class="text-medium">Mungkin kamu bingung kenapa aku kirim ini...</p>
+            <p class="text-medium">Tapi tolong baca sampai habis ya.</p>
             <button class="btn" onclick="nextScreen(2)">Lanjut ❤️</button>
         </div>
 
         <!-- SCREEN 2: Appreciation -->
         <div id="screen2" class="screen">
-            <h1 style="font-size: 1.8rem;">Makasih ya... 🌻</h1>
-            <p style="font-size: 1.05rem;">Aku cuma mau bilang makasih. Kehadiranmu belakangan ini benar-benar bikin hari-hariku jauh lebih berwarna.</p>
-            <p style="font-size: 1.05rem; font-weight: 600; color: #d6336c;">Apalagi karena <span id="sifatDia"></span>.</p>
+            <h1 class="title-medium">Makasih ya... 🌻</h1>
+            <p class="text-small">Aku cuma mau bilang makasih. Kehadiranmu belakangan ini benar-benar bikin hari-hariku jauh lebih berwarna.</p>
+            <p class="text-highlight">Apalagi karena <span id="sifatDia"></span>.</p>
             <button class="btn" onclick="nextScreen(3)">Lanjut ❤️</button>
         </div>
 
         <!-- SCREEN 3: Vulnerability -->
         <div id="screen3" class="screen">
-            <h1 style="font-size: 1.8rem;">Jujur aja... 🥺</h1>
-            <p style="font-size: 1.05rem;">Bikin ginian tuh butuh keberanian yang besar banget buat aku.</p>
-            <p style="font-size: 1.05rem;">Aku takut merusak apa yang udah kita punya, tapi aku lebih takut lagi kalau aku nggak pernah jujur soal perasaanku ke kamu.</p>
+            <h1 class="title-medium">Jujur aja... 🥺</h1>
+            <p class="text-small">Bikin ginian tuh butuh keberanian yang besar banget buat aku.</p>
+            <p class="text-small">Aku takut merusak apa yang udah kita punya, tapi aku lebih takut lagi kalau aku nggak pernah jujur soal perasaanku ke kamu.</p>
             <button class="btn" onclick="nextScreen(4)">Lanjut ❤️</button>
         </div>
 
         <!-- SCREEN 4: Question -->
         <div id="screen4" class="screen">
             <h1>Jadi, setelah sekian lama...</h1>
-            <h1 style="font-size: 2rem; color: #ff0055;">Maukah kamu jadi pacarku? ❤️</h1>
+            <h1 class="title-large">Maukah kamu jadi pacarku? ❤️</h1>
             
             <div class="action-buttons" id="actionButtons">
                 <button class="btn btn-mau" onclick="nextScreen(5)">MAU ❤️</button>
@@ -429,9 +447,9 @@
             </div>
             
             <h1>YEEEEAY! ❤️🥰</h1>
-            <p style="font-weight: 600; font-size: 1.2rem;">Mulai hari ini, kamu resmi menjadi orang yang paling aku sayang, <span id="namaDia2"></span>.</p>
+            <p class="text-bold">Mulai hari ini, kamu resmi menjadi orang yang paling aku sayang, <span id="namaDia2"></span>.</p>
             
-            <p style="font-style: italic;">"<span id="pesanPribadi"></span>"<br><br>Terima kasih sudah memilih aku. Aku janji akan selalu berusaha membuatmu tersenyum.<br><br>~ <span id="namaKamu"></span></p>
+            <p class="text-italic">"<span id="pesanPribadi"></span>"<br><br>Terima kasih sudah memilih aku. Aku janji akan selalu berusaha membuatmu tersenyum.<br><br>~ <span id="namaKamu"></span></p>
             
             <button class="btn" onclick="sendHugs()">Peluk jauh 🤗</button>
             <div id="hugMessage">Sending unlimited hugs... ❤️❤️❤️</div>
