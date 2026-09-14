@@ -97,12 +97,6 @@
             <span class="note">*Support direct link & Google Drive (Pastikan setting GDrive: Anyone with the link)</span>
         </div>
         
-        <div class="form-group">
-            <label>Link Musik MP3 (Opsional)</label>
-            <input type="text" id="inpMusic" placeholder="https://contoh.com/lagu.mp3">
-            <span class="note">*Harus berupa link langsung ke file musik (.mp3)</span>
-        </div>
-        
         <button class="btn" onclick="generateLink()">Buat Link Rahasia ✨</button>
         
         <div class="result-box" id="resultBox">
@@ -146,7 +140,6 @@
             const msg = document.getElementById('inpMsg').value.trim();
             const wa = document.getElementById('inpWA').value.trim().replace(/[^0-9]/g, ''); // Hanya ambil angka
             let photo = document.getElementById('inpPhoto').value.trim();
-            const music = document.getElementById('inpMusic').value.trim();
             
             // Convert Google Drive link jika ada
             photo = convertGoogleDriveLink(photo);
@@ -168,7 +161,6 @@
             if (msg) dataObj.msg = msg;
             if (wa) dataObj.wa = wa;
             if (photo) dataObj.photo = photo;
-            if (music) dataObj.music = music;
             
             if (Object.keys(dataObj).length > 0) {
                 // Konversi objek ke JSON string

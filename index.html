@@ -350,7 +350,6 @@
         let NAMA_DIA = "Aneyy"; 
         let NAMA_KAMU = "Agim";
         let FOTO_KAMI = "https://images.unsplash.com/photo-1518199266791-5375a83190b7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"; 
-        let MUSIC_SRC = "lagu.mp3"; 
         let PESAN_PRIBADI = "Aku sadar bahwa hal terbaik dalam hidupku adalah saat bersamamu.";
         let SIFAT_DIA = "kamu selalu sabar dengerin ceritaku";
         let WHATSAPP_NUMBER = "";
@@ -376,7 +375,6 @@
                 if (dataObj.from) NAMA_KAMU = dataObj.from;
                 if (dataObj.reason) SIFAT_DIA = dataObj.reason;
                 if (dataObj.photo) FOTO_KAMI = dataObj.photo;
-                if (dataObj.music) MUSIC_SRC = dataObj.music;
                 if (dataObj.msg) PESAN_PRIBADI = dataObj.msg;
                 if (dataObj.wa) WHATSAPP_NUMBER = dataObj.wa;
                 
@@ -388,13 +386,8 @@
     
     <!-- Lagu Romantis -->
     <audio id="bgMusic" autoplay loop>
-        <source id="bgMusicSrc" src="lagu.mp3" type="audio/mpeg">
+        <source src="lagu.mp3" type="audio/mpeg">
     </audio>
-    <script>
-        // Update audio source dynamically before the page fully loads
-        document.getElementById('bgMusicSrc').src = MUSIC_SRC;
-        document.getElementById('bgMusic').load();
-    </script>
     <!-- ============================================== -->
 
     <div class="audio-controls" onclick="toggleMusic()" title="Play/Pause Music">
