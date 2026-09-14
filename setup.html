@@ -119,15 +119,24 @@
                 baseUrl = parts.join('/') + '/index.html';
             }
             
-            const params = new URLSearchParams();
-            if (to) params.append('to', to);
-            if (from) params.append('from', from);
-            if (msg) params.append('msg', msg);
-            if (photo) params.append('photo', photo);
-            if (music) params.append('music', music);
+            const dataObj = {};
+            if (to) dataObj.to = to;
+            if (from) dataObj.from = from;
+            if (msg) dataObj.msg = msg;
+            if (photo) dataObj.photo = photo;
+            if (music) dataObj.music = music;
             
-            const queryString = params.toString();
-            generatedUrl = queryString ? `${baseUrl}?${queryString}` : baseUrl;
+            if (Object.keys(dataObj).length > 0) {
+                // Konversi objek ke JSON string
+                const jsonStr = JSON.stringify(dataObj);
+                // Enkripsi (Base64) dengan support karakter Emoji/Unicode
+                const base64Str = window.btoa(unescape(encodeURIComponent(jsonStr)));
+                // Hilangkan padding "=" agar lebih bersih
+                const cleanBase64 = base64Str.replace(/=+$/, '');
+                generatedUrl = `${baseUrl}?data=${cleanBase64}`;
+            } else {
+                generatedUrl = baseUrl;
+            }
             
             document.getElementById('resultLink').innerText = generatedUrl;
             document.getElementById('resultBox').style.display = 'block';

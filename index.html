@@ -336,13 +336,33 @@
         let PESAN_PRIBADI = "Aku sadar bahwa hal terbaik dalam hidupku adalah saat bersamamu.";
         const TANGGAL_MULAI_SUKA = "pertama kali kita bertemu";
 
-        // --- BACA PARAMETER DARI URL ---
+        // --- BACA PARAMETER DARI URL (ENKRIPSI BASE64) ---
         const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.has('to') && urlParams.get('to').trim() !== '') NAMA_DIA = urlParams.get('to');
-        if (urlParams.has('from') && urlParams.get('from').trim() !== '') NAMA_KAMU = urlParams.get('from');
-        if (urlParams.has('photo') && urlParams.get('photo').trim() !== '') FOTO_KAMI = urlParams.get('photo');
-        if (urlParams.has('music') && urlParams.get('music').trim() !== '') MUSIC_SRC = urlParams.get('music');
-        if (urlParams.has('msg') && urlParams.get('msg').trim() !== '') PESAN_PRIBADI = urlParams.get('msg');
+        const encodedData = urlParams.get('data');
+        
+        if (encodedData) {
+            try {
+                // Restore padding "=" yang mungkin hilang
+                let base64 = encodedData;
+                while (base64.length % 4 !== 0) {
+                    base64 += '=';
+                }
+                
+                // Dekripsi Base64 ke JSON string
+                const jsonStr = decodeURIComponent(escape(window.atob(base64)));
+                const dataObj = JSON.parse(jsonStr);
+                
+                // Timpa nilai default dengan data dari URL jika ada
+                if (dataObj.to) NAMA_DIA = dataObj.to;
+                if (dataObj.from) NAMA_KAMU = dataObj.from;
+                if (dataObj.photo) FOTO_KAMI = dataObj.photo;
+                if (dataObj.music) MUSIC_SRC = dataObj.music;
+                if (dataObj.msg) PESAN_PRIBADI = dataObj.msg;
+                
+            } catch (e) {
+                console.error("Gagal membaca data rahasia dari URL:", e);
+            }
+        }
     </script>
     
     <!-- Lagu Romantis -->
