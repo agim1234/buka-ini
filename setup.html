@@ -74,7 +74,7 @@
 <body>
     <div class="container">
         <h2>💌 Link Generator 💌</h2>
-        <p class="desc">Isi form di bawah untuk merakit website romantis milikmu sendiri. Kosongkan jika ingin memakai bawaan (default).</p>
+        <p class="desc">Isi semua form di bawah untuk merakit website romantis milikmu sendiri. Wajib diisi!</p>
         
         <div class="form-group">
             <label>Nama Dia (Penerima)</label>
@@ -97,7 +97,7 @@
         </div>
         
         <div class="form-group">
-            <label>Nomor WhatsApp Kamu (Opsional)</label>
+            <label>Nomor WhatsApp Kamu</label>
             <input type="text" id="inpWA" placeholder="Contoh: 08123456789">
             <span class="note">*Agar saat dia klik 'Peluk Jauh', otomatis ngirim pesan WA ke kamu tanda dia terima!</span>
         </div>
@@ -156,6 +156,11 @@
             const reason = document.getElementById('inpReason').value.trim();
             const msg = document.getElementById('inpMsg').value.trim();
             let wa = document.getElementById('inpWA').value.trim().replace(/[^0-9]/g, ''); // Hanya ambil angka
+            
+            if (!to || !from || !reason || !msg || !wa) {
+                alert("Mohon isi semua kolom (kecuali Link Foto) agar hasilnya sempurna!");
+                return;
+            }
             
             // Format otomatis ke 62 (Kode Negara Indonesia)
             if (wa.startsWith('0')) {

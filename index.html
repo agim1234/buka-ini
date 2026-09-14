@@ -379,41 +379,46 @@
     <!-- BAGIAN YANG BISA DIEDIT / DISESUAIKAN          -->
     <!-- ============================================== -->
     <script>
-        // --- KONFIGURASI DEFAULT ---
-        let NAMA_DIA = "Aneyy"; 
-        let NAMA_KAMU = "Agim";
-        let FOTO_KAMI = "https://images.unsplash.com/photo-1518199266791-5375a83190b7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"; 
-        let PESAN_PRIBADI = "Aku sadar bahwa hal terbaik dalam hidupku adalah saat bersamamu.";
-        let SIFAT_DIA = "kamu selalu sabar dengerin ceritaku";
-        let WHATSAPP_NUMBER = "";
-
         // --- BACA PARAMETER DARI URL (ENKRIPSI BASE64) ---
         const urlParams = new URLSearchParams(window.location.search);
         const encodedData = urlParams.get('data');
         
-        if (encodedData) {
-            try {
-                // Restore padding "=" yang mungkin hilang
-                let base64 = encodedData;
-                while (base64.length % 4 !== 0) {
-                    base64 += '=';
-                }
-                
-                // Dekripsi Base64 ke JSON string
-                const jsonStr = decodeURIComponent(escape(window.atob(base64)));
-                const dataObj = JSON.parse(jsonStr);
-                
-                // Timpa nilai default dengan data dari URL jika ada
-                if (dataObj.to) NAMA_DIA = dataObj.to;
-                if (dataObj.from) NAMA_KAMU = dataObj.from;
-                if (dataObj.reason) SIFAT_DIA = dataObj.reason;
-                if (dataObj.photo) FOTO_KAMI = dataObj.photo;
-                if (dataObj.msg) PESAN_PRIBADI = dataObj.msg;
-                if (dataObj.wa) WHATSAPP_NUMBER = dataObj.wa;
-                
-            } catch (e) {
-                console.error("Gagal membaca data rahasia dari URL:", e);
+        if (!encodedData) {
+            // Jika tidak ada data rahasia, langsung buang ke generator!
+            window.location.href = 'setup.html';
+        }
+
+        let NAMA_DIA, NAMA_KAMU, FOTO_KAMI, PESAN_PRIBADI, SIFAT_DIA, WHATSAPP_NUMBER;
+
+        try {
+            // Restore padding "=" yang mungkin hilang
+            let base64 = encodedData;
+            while (base64.length % 4 !== 0) {
+                base64 += '=';
             }
+            
+            // Dekripsi Base64 ke JSON string
+            const jsonStr = decodeURIComponent(escape(window.atob(base64)));
+            const dataObj = JSON.parse(jsonStr);
+            
+            // Setel nilai dari URL
+            NAMA_DIA = dataObj.to;
+            NAMA_KAMU = dataObj.from;
+            SIFAT_DIA = dataObj.reason;
+            PESAN_PRIBADI = dataObj.msg;
+            WHATSAPP_NUMBER = dataObj.wa;
+            
+            // Jika ada field penting yang kosong (karena manipulasi URL), kembalikan
+            if (!NAMA_DIA || !NAMA_KAMU || !SIFAT_DIA || !PESAN_PRIBADI || !WHATSAPP_NUMBER) {
+                window.location.href = 'setup.html';
+            }
+            
+            // Foto itu opsional. Jika kosong, pakai foto default romantis.
+            FOTO_KAMI = dataObj.photo ? dataObj.photo : "https://images.unsplash.com/photo-1518199266791-5375a83190b7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"; 
+            
+        } catch (e) {
+            console.error("Gagal membaca data rahasia dari URL:", e);
+            window.location.href = 'setup.html';
         }
     </script>
     
