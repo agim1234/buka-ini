@@ -87,7 +87,7 @@
         
         <div class="form-group">
             <label>Nomor WhatsApp Kamu (Opsional)</label>
-            <input type="text" id="inpWA" placeholder="Contoh: 628123456789 (Awali dengan 62)">
+            <input type="text" id="inpWA" placeholder="Contoh: 08123456789">
             <span class="note">*Agar saat dia klik 'Peluk Jauh', otomatis ngirim pesan WA ke kamu tanda dia terima!</span>
         </div>
         
@@ -138,7 +138,15 @@
             const from = document.getElementById('inpFrom').value.trim();
             const reason = document.getElementById('inpReason').value.trim();
             const msg = document.getElementById('inpMsg').value.trim();
-            const wa = document.getElementById('inpWA').value.trim().replace(/[^0-9]/g, ''); // Hanya ambil angka
+            let wa = document.getElementById('inpWA').value.trim().replace(/[^0-9]/g, ''); // Hanya ambil angka
+            
+            // Format otomatis ke 62 (Kode Negara Indonesia)
+            if (wa.startsWith('0')) {
+                wa = '62' + wa.substring(1);
+            } else if (wa.startsWith('8')) {
+                wa = '62' + wa;
+            }
+            
             let photo = document.getElementById('inpPhoto').value.trim();
             
             // Convert Google Drive link jika ada
