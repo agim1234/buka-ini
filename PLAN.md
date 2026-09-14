@@ -1,53 +1,73 @@
 ## Goal Description
-Kamu ingin menggunakan link foto dari **Google Drive**. 
-Masalahnya adalah, link yang dibagikan oleh Google Drive (contoh: `drive.google.com/file/d/ID_FOTO/view`) adalah *link halaman web Google Drive*, BUKAN *direct link* langsung ke file gambarnya. Jika link itu dipasang langsung ke dalam `<img src="...">`, gambarnya akan **error / rusak** (tidak muncul).
+Kamu ingin memberikan efek *suspense* (ketegangan yang mendebarkan) setelah si target menekan tombol **"MAU ❤️"**. 
+Alih-alih langsung memunculkan halaman perayaan (konfeti dan foto), kita akan menyisipkan satu **Halaman Transisi (Loading Screen)**.
 
-Untuk mengatasinya, kita perlu membuat fitur **Smart Link Converter**.
-Fitur ini akan mendeteksi jika kamu memasukkan link Google Drive, lalu secara otomatis mengubahnya menjadi format *Direct Link* (`drive.google.com/uc?export=view&id=ID_FOTO`) agar bisa ditampilkan sebagai foto di website romantismu!
+Halaman ini akan membuat dia menunggu selama beberapa detik dengan perasaan deg-degan sebelum melihat hasil akhirnya!
+
+## Ide Halaman Transisi (The Suspense Screen)
+Kita akan menambahkan layar ekstra (sebut saja Screen 4.5) yang akan muncul otomatis setelah dia klik "MAU".
+
+Di layar ini, kita bisa menampilkan:
+- Ikon hati besar yang berdetak (animasi *heartbeat*).
+- Teks yang berkedip: *"Memproses jawabanmu..."* atau *"Tunggu sebentar ya... 🥺"*
+- Setelah 3 detik (waktu yang cukup bikin dia deg-degan), layar akan otomatis pindah sendiri ke **Screen 5** (Halaman Sukses).
 
 ## Proposed Changes
 
-### `setup.html`
-Kita akan menambahkan fungsi deteksi cerdas (Regex) di dalam JavaScript. Saat kamu mengklik "Buat Link Rahasia", sistem akan memeriksa apakah link foto itu dari Google Drive. Jika iya, sistem akan menyedot ID foto-nya dan merakit ulang link tersebut menjadi *Direct Link* yang valid.
+### `index.html`
+Kita akan menambahkan 1 buah elemen `<div>` berkelas `.screen` di antara Screen 4 dan Screen 5, serta memodifikasi CSS dan JavaScript untuk menunda perpindahan ke Screen 5.
 
-#### [MODIFY] setup.html
-```javascript
-// Fungsi baru untuk mendeteksi dan mengubah link GDrive
-function convertGoogleDriveLink(url) {
-    if (!url) return url;
-    
-    // Pola 1: drive.google.com/file/d/ID/view
-    const regex1 = /drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/;
-    // Pola 2: drive.google.com/open?id=ID
-    const regex2 = /drive\.google\.com\/open\?id=([a-zA-Z0-9_-]+)/;
-    
-    let id = null;
-    if (url.match(regex1)) id = url.match(regex1)[1];
-    else if (url.match(regex2)) id = url.match(regex2)[1];
-    
-    // Jika itu link GDrive, ubah jadi Direct Link
-    if (id) {
-        return `https://drive.google.com/uc?export=view&id=${id}`;
-    }
-    
-    // Jika bukan GDrive (misal Imgur/IG), kembalikan apa adanya
-    return url;
+#### [MODIFY] index.html (CSS)
+Menambahkan animasi detak jantung untuk efek *suspense*.
+```css
+@keyframes heartbeat {
+    0% { transform: scale(1); }
+    15% { transform: scale(1.3); }
+    30% { transform: scale(1); }
+    45% { transform: scale(1.3); }
+    60% { transform: scale(1); }
 }
-
-// Lalu dipanggil di dalam fungsi generateLink():
-let photo = document.getElementById('inpPhoto').value.trim();
-photo = convertGoogleDriveLink(photo); // <-- KONVERSI OTOMATIS
+.loading-heart {
+    font-size: 5rem;
+    animation: heartbeat 1.2s infinite;
+    margin-bottom: 20px;
+}
 ```
 
-Kita juga akan memperbarui teks petunjuk di HTML agar pengguna tahu bahwa Google Drive sekarang didukung.
+#### [MODIFY] index.html (HTML)
+```html
+<!-- SCREEN 4.5: Suspense Transition -->
+<div id="screenTransition" class="screen">
+    <div class="loading-heart">❤️</div>
+    <h2 class="title-medium">Tunggu sebentar...</h2>
+    <p class="text-medium">Sedang menyimpan jawabanmu 🤭</p>
+</div>
+```
+
+#### [MODIFY] index.html (JavaScript)
+Saat tombol "MAU" di Screen 4 ditekan, kita pindah ke `screenTransition`. Lalu set *timer* 3 detik untuk pindah ke Screen 5.
+```javascript
+// Di Screen 4
+<button class="btn btn-mau" onclick="showTransition()">MAU ❤️</button>
+
+// Di Javascript
+function showTransition() {
+    nextScreen('Transition'); // Pindah ke layar suspense
+    
+    // Tunggu 3 detik, lalu tembak ke layar 5
+    setTimeout(() => {
+        nextScreen(5);
+    }, 3000);
+}
+```
 
 ## User Review Required
 > [!IMPORTANT]
-> **Catatan Penting Google Drive:**
-> Meskipun sistem kita sudah mengonversi linknya, kamu **HARUS** memastikan bahwa foto di Google Drive tersebut pengaturan aksesnya diatur menjadi **"Siapa saja yang memiliki link" (Anyone with the link)**. 
-> Jika statusnya "Dibatasi (Restricted)", fotonya tetap tidak akan bisa dimuat oleh targetmu.
+> Apakah durasi **3 detik** cukup untuk membuatnya berdebar? Atau kamu ingin lebih lama (misal 5 detik)?
+> Lalu, apakah teks *"Tunggu sebentar... Sedang menyimpan jawabanmu 🤭"* sudah pas, atau kamu punya ide kata-kata lain?
 
 ## Verification Plan
-1. Menambahkan fungsi ke `setup.html`.
-2. Mencoba memasukkan link GDrive biasa.
-3. Memastikan gambar bisa tampil saat URL dibuka.
+1. Mengubah struktur HTML di `index.html`.
+2. Menekan tombol MAU di Screen 4.
+3. Memastikan layar transisi muncul dan berdetak.
+4. Memastikan konfeti dan foto akhirnya muncul setelah waktu habis.
