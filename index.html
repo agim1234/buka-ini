@@ -334,7 +334,7 @@
         let FOTO_KAMI = "https://images.unsplash.com/photo-1518199266791-5375a83190b7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"; 
         let MUSIC_SRC = "lagu.mp3"; 
         let PESAN_PRIBADI = "Aku sadar bahwa hal terbaik dalam hidupku adalah saat bersamamu.";
-        const TANGGAL_MULAI_SUKA = "pertama kali kita bertemu";
+        let SIFAT_DIA = "kamu selalu sabar dengerin ceritaku";
 
         // --- BACA PARAMETER DARI URL (ENKRIPSI BASE64) ---
         const urlParams = new URLSearchParams(window.location.search);
@@ -355,6 +355,7 @@
                 // Timpa nilai default dengan data dari URL jika ada
                 if (dataObj.to) NAMA_DIA = dataObj.to;
                 if (dataObj.from) NAMA_KAMU = dataObj.from;
+                if (dataObj.reason) SIFAT_DIA = dataObj.reason;
                 if (dataObj.photo) FOTO_KAMI = dataObj.photo;
                 if (dataObj.music) MUSIC_SRC = dataObj.music;
                 if (dataObj.msg) PESAN_PRIBADI = dataObj.msg;
@@ -388,24 +389,41 @@
         <!-- SCREEN 1: Intro -->
         <div id="screen1" class="screen active">
             <h1>Hai, <span id="namaDia1"></span> ❤️</h1>
-            <p>Sebenarnya sudah lama aku ingin mengatakan ini... tepatnya sejak <span id="tanggalSuka"></span>.</p>
-            <p style="font-weight: 600; font-size: 1.2rem;">Aku punya satu pertanyaan penting buat kamu.</p>
+            <p style="font-size: 1.1rem;">Mungkin kamu bingung kenapa aku kirim ini...</p>
+            <p style="font-size: 1.1rem;">Tapi tolong baca sampai habis ya.</p>
             <button class="btn" onclick="nextScreen(2)">Lanjut ❤️</button>
         </div>
 
-        <!-- SCREEN 2: Question -->
+        <!-- SCREEN 2: Appreciation -->
         <div id="screen2" class="screen">
-            <h1>Maukah kamu menjadi pacarku? ❤️</h1>
+            <h1 style="font-size: 1.8rem;">Makasih ya... 🌻</h1>
+            <p style="font-size: 1.05rem;">Aku cuma mau bilang makasih. Kehadiranmu belakangan ini benar-benar bikin hari-hariku jauh lebih berwarna.</p>
+            <p style="font-size: 1.05rem; font-weight: 600; color: #d6336c;">Apalagi karena <span id="sifatDia"></span>.</p>
+            <button class="btn" onclick="nextScreen(3)">Lanjut ❤️</button>
+        </div>
+
+        <!-- SCREEN 3: Vulnerability -->
+        <div id="screen3" class="screen">
+            <h1 style="font-size: 1.8rem;">Jujur aja... 🥺</h1>
+            <p style="font-size: 1.05rem;">Bikin ginian tuh butuh keberanian yang besar banget buat aku.</p>
+            <p style="font-size: 1.05rem;">Aku takut merusak apa yang udah kita punya, tapi aku lebih takut lagi kalau aku nggak pernah jujur soal perasaanku ke kamu.</p>
+            <button class="btn" onclick="nextScreen(4)">Lanjut ❤️</button>
+        </div>
+
+        <!-- SCREEN 4: Question -->
+        <div id="screen4" class="screen">
+            <h1>Jadi, setelah sekian lama...</h1>
+            <h1 style="font-size: 2rem; color: #ff0055;">Maukah kamu jadi pacarku? ❤️</h1>
             
             <div class="action-buttons" id="actionButtons">
-                <button class="btn btn-mau" onclick="nextScreen(3)">MAU ❤️</button>
+                <button class="btn btn-mau" onclick="nextScreen(5)">MAU ❤️</button>
                 <button class="btn btn-reject" id="btnReject" onclick="moveButton(event)">TOLAK 😜</button>
             </div>
             <div class="funny-text" id="funnyText"></div>
         </div>
 
-        <!-- SCREEN 3: Success -->
-        <div id="screen3" class="screen">
+        <!-- SCREEN 5: Success -->
+        <div id="screen5" class="screen">
             <div class="photo-container" id="photoBox">
                 <img id="fotoKami" src="" alt="Foto Kita">
             </div>
@@ -428,7 +446,7 @@
         // Apply customizations to HTML
         document.getElementById('namaDia1').innerText = NAMA_DIA;
         document.getElementById('namaDia2').innerText = NAMA_DIA;
-        document.getElementById('tanggalSuka').innerText = TANGGAL_MULAI_SUKA;
+        document.getElementById('sifatDia').innerText = SIFAT_DIA;
         document.getElementById('fotoKami').src = FOTO_KAMI;
         document.getElementById('pesanPribadi').innerText = PESAN_PRIBADI;
         document.getElementById('namaKamu').innerText = NAMA_KAMU;
@@ -484,7 +502,7 @@
                 void next.offsetWidth;
                 next.classList.add('active');
                 
-                if (screenNum === 3) {
+                if (screenNum === 5) {
                     document.getElementById('photoBox').style.display = 'block';
                     startSuccessAnimation();
                     if(!isMusicPlaying) toggleMusic(); // Auto play music on success if not playing

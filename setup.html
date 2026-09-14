@@ -73,6 +73,11 @@
         </div>
         
         <div class="form-group">
+            <label>Hal yang bikin baper dari dia</label>
+            <input type="text" id="inpReason" placeholder="Contoh: kamu selalu sabar dengerin ceritaku">
+        </div>
+        
+        <div class="form-group">
             <label>Pesan Pribadi Tambahan</label>
             <input type="text" id="inpMsg" placeholder="Contoh: Aku sayang kamu selamanya...">
         </div>
@@ -105,6 +110,7 @@
         function generateLink() {
             const to = document.getElementById('inpTo').value.trim();
             const from = document.getElementById('inpFrom').value.trim();
+            const reason = document.getElementById('inpReason').value.trim();
             const msg = document.getElementById('inpMsg').value.trim();
             const photo = document.getElementById('inpPhoto').value.trim();
             const music = document.getElementById('inpMusic').value.trim();
@@ -122,6 +128,7 @@
             const dataObj = {};
             if (to) dataObj.to = to;
             if (from) dataObj.from = from;
+            if (reason) dataObj.reason = reason;
             if (msg) dataObj.msg = msg;
             if (photo) dataObj.photo = photo;
             if (music) dataObj.music = music;
