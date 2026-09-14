@@ -269,6 +269,25 @@
             margin-bottom: 20px;
         }
 
+        .full-screen-loading {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: var(--bg-gradient);
+            z-index: 9999;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .full-screen-loading.active {
+            display: flex;
+            opacity: 1;
+        }
+
         /* Pure CSS Animations for Performance */
         @keyframes fallConfetti {
             0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
@@ -448,13 +467,6 @@
             </div>
             <div class="funny-text" id="funnyText"></div>
         </div>
-        
-        <!-- SCREEN 4.5: Transition Suspense -->
-        <div id="screenTransition" class="screen">
-            <div class="loading-heart">❤️</div>
-            <h2 class="title-medium">Tunggu sebentar...</h2>
-            <p class="text-medium">Sedang memproses jawabanmu 🤭</p>
-        </div>
 
         <!-- SCREEN 5: Success -->
         <div id="screen5" class="screen">
@@ -471,6 +483,13 @@
             <div id="hugMessage">Sending unlimited hugs... ❤️❤️❤️</div>
         </div>
 
+    </div>
+    
+    <!-- FULL SCREEN 4.5: Transition Suspense -->
+    <div id="screenTransition" class="full-screen-loading">
+        <div class="loading-heart">❤️</div>
+        <h2 class="title-large" style="margin:0; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">Tunggu sebentar...</h2>
+        <p class="text-medium" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.5);">Sedang memproses jawabanmu 🤭</p>
     </div>
 
     <!-- Container for Confetti -->
@@ -524,11 +543,32 @@
 
         // Screen Navigation
         function showTransition() {
-            nextScreen('Transition'); // Memanggil id "screenTransition"
+            const overlay = document.getElementById('screenTransition');
+            overlay.style.display = 'flex'; // Prepare flex layout
+            void overlay.offsetWidth; // Force reflow
+            overlay.classList.add('active'); // Trigger fade-in
             
-            // Tunggu 3 detik, lalu pindah ke layar perayaan (Screen 5)
+            // Pindahkan ke background screen5 secara rahasia di balik layar
+            document.querySelectorAll('.screen').forEach(s => {
+                s.classList.remove('active');
+                s.style.display = 'none';
+            });
+            
+            // Tunggu 3 detik, lalu buka layar perayaan
             setTimeout(() => {
-                nextScreen(5);
+                // Matikan overlay loading
+                overlay.classList.remove('active');
+                setTimeout(() => overlay.style.display = 'none', 500);
+                
+                // Tampilkan screen 5
+                const next = document.getElementById('screen5');
+                next.style.display = 'block';
+                void next.offsetWidth;
+                next.classList.add('active');
+                
+                document.getElementById('photoBox').style.display = 'block';
+                startSuccessAnimation();
+                if(!isMusicPlaying) toggleMusic();
             }, 3000);
         }
         
