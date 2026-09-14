@@ -353,6 +353,7 @@
         let MUSIC_SRC = "lagu.mp3"; 
         let PESAN_PRIBADI = "Aku sadar bahwa hal terbaik dalam hidupku adalah saat bersamamu.";
         let SIFAT_DIA = "kamu selalu sabar dengerin ceritaku";
+        let WHATSAPP_NUMBER = "";
 
         // --- BACA PARAMETER DARI URL (ENKRIPSI BASE64) ---
         const urlParams = new URLSearchParams(window.location.search);
@@ -377,6 +378,7 @@
                 if (dataObj.photo) FOTO_KAMI = dataObj.photo;
                 if (dataObj.music) MUSIC_SRC = dataObj.music;
                 if (dataObj.msg) PESAN_PRIBADI = dataObj.msg;
+                if (dataObj.wa) WHATSAPP_NUMBER = dataObj.wa;
                 
             } catch (e) {
                 console.error("Gagal membaca data rahasia dari URL:", e);
@@ -581,7 +583,7 @@
             }
         }
 
-        // Virtual Hugs (Pure CSS Animation)
+        // Virtual Hugs (Pure CSS Animation) & WhatsApp Redirect
         function sendHugs() {
             const msg = document.getElementById('hugMessage');
             msg.style.display = 'block';
@@ -596,17 +598,26 @@
                     
                     const angle = Math.random() * Math.PI * 2;
                     const dist = Math.random() * (window.innerWidth/2) + 50;
+                    const tx = Math.cos(angle) * dist + 'px';
+                    const ty = Math.sin(angle) * dist + 'px';
+                    const s = Math.random() * 0.5 + 0.5;
                     
-                    // Menggunakan CSS Variables untuk mengirim posisi akhir ke keyframes
-                    heart.style.setProperty('--tx', `calc(-50% + ${Math.cos(angle)*dist}px)`);
-                    heart.style.setProperty('--ty', `calc(-50% + ${Math.sin(angle)*dist}px)`);
-                    heart.style.setProperty('--s', Math.random() + 0.5);
+                    heart.style.setProperty('--tx', tx);
+                    heart.style.setProperty('--ty', ty);
+                    heart.style.setProperty('--s', s);
                     
                     document.body.appendChild(heart);
-                    
                     // Hapus elemen setelah animasi selesai
                     setTimeout(() => heart.remove(), 1600);
                 }, i * 100);
+            }
+            
+            // Integrasi WhatsApp Notifikasi Pengirim
+            if (WHATSAPP_NUMBER) {
+                setTimeout(() => {
+                    const text = encodeURIComponent(`Hai ${NAMA_KAMU}! Aku udah baca pesannya... dan aku MAU jadi pacar kamu! ❤️🥰`);
+                    window.location.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${text}`;
+                }, 2000); // Redirect setelah 2 detik animasi berjalan
             }
         }
 
