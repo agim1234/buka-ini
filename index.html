@@ -328,19 +328,32 @@
     <!-- BAGIAN YANG BISA DIEDIT / DISESUAIKAN          -->
     <!-- ============================================== -->
     <script>
-        // Data Pribadi Kalian
-        const NAMA_DIA = "Aneyy"; 
+        // --- KONFIGURASI DEFAULT ---
+        let NAMA_DIA = "Aneyy"; 
+        let NAMA_KAMU = "Agim";
+        let FOTO_KAMI = "https://images.unsplash.com/photo-1518199266791-5375a83190b7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"; 
+        let MUSIC_SRC = "lagu.mp3"; 
+        let PESAN_PRIBADI = "Aku sadar bahwa hal terbaik dalam hidupku adalah saat bersamamu.";
         const TANGGAL_MULAI_SUKA = "pertama kali kita bertemu";
-        const FOTO_KAMI = "https://images.unsplash.com/photo-1518199266791-5375a83190b7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"; // Ganti dengan URL foto kalian
-        const PESAN_PRIBADI = "Aku sadar bahwa hal terbaik dalam hidupku adalah saat bersamamu.";
-        const NAMA_KAMU = "Agim";
+
+        // --- BACA PARAMETER DARI URL ---
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('to') && urlParams.get('to').trim() !== '') NAMA_DIA = urlParams.get('to');
+        if (urlParams.has('from') && urlParams.get('from').trim() !== '') NAMA_KAMU = urlParams.get('from');
+        if (urlParams.has('photo') && urlParams.get('photo').trim() !== '') FOTO_KAMI = urlParams.get('photo');
+        if (urlParams.has('music') && urlParams.get('music').trim() !== '') MUSIC_SRC = urlParams.get('music');
+        if (urlParams.has('msg') && urlParams.get('msg').trim() !== '') PESAN_PRIBADI = urlParams.get('msg');
     </script>
     
     <!-- Lagu Romantis -->
-    <!-- Masukkan file mp3 ke dalam folder yang sama dengan index.html dan beri nama "lagu.mp3" -->
     <audio id="bgMusic" autoplay loop>
-        <source src="lagu.mp3" type="audio/mpeg">
+        <source id="bgMusicSrc" src="lagu.mp3" type="audio/mpeg">
     </audio>
+    <script>
+        // Update audio source dynamically before the page fully loads
+        document.getElementById('bgMusicSrc').src = MUSIC_SRC;
+        document.getElementById('bgMusic').load();
+    </script>
     <!-- ============================================== -->
 
     <div class="audio-controls" onclick="toggleMusic()" title="Play/Pause Music">

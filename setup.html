@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup Buka-Ini ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #ff4d6d;
+            --bg-gradient: linear-gradient(135deg, #ffb3c6, #ff8fa3, #ff4d6d);
+        }
+        body, html {
+            margin: 0; padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-gradient);
+            color: #333;
+            min-height: 100vh;
+        }
+        .container {
+            width: 90%;
+            max-width: 600px;
+            margin: 5vh auto;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px 0 rgba(255, 100, 150, 0.37);
+        }
+        h2 { text-align: center; color: #fff; text-shadow: 1px 1px 4px rgba(0,0,0,0.4); }
+        p.desc { text-align: center; color: #fff; font-size: 0.9rem; margin-bottom: 25px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: 600; margin-bottom: 5px; color: #4a0414; }
+        input[type="text"] {
+            width: 100%; padding: 10px; border-radius: 10px; border: 1px solid #ffb3c6;
+            background: rgba(255,255,255,0.8); font-family: 'Poppins', sans-serif;
+            box-sizing: border-box;
+        }
+        .btn {
+            background: #ff4d6d; color: #fff; border: none; padding: 12px 30px;
+            font-size: 1.1rem; font-weight: 600; border-radius: 30px; cursor: pointer;
+            width: 100%; transition: 0.3s; margin-top: 15px;
+        }
+        .btn:hover { background: #e03e5c; transform: translateY(-2px); }
+        .result-box {
+            margin-top: 25px; display: none; background: rgba(255,255,255,0.7);
+            padding: 15px; border-radius: 15px;
+        }
+        .result-link {
+            word-break: break-all; font-size: 0.85rem; color: #000;
+            background: #fff; padding: 10px; border-radius: 8px; border: 1px dashed #ff4d6d;
+            margin: 10px 0;
+        }
+        .btn-copy { background: #333; }
+        .btn-copy:hover { background: #000; }
+        .note { font-size: 0.8rem; color: #4a0414; margin-top: 5px; display: block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>💌 Link Generator 💌</h2>
+        <p class="desc">Isi form di bawah untuk merakit website romantis milikmu sendiri. Kosongkan jika ingin memakai bawaan (default).</p>
+        
+        <div class="form-group">
+            <label>Nama Dia (Penerima)</label>
+            <input type="text" id="inpTo" placeholder="Contoh: Aneyy">
+        </div>
+        
+        <div class="form-group">
+            <label>Nama Kamu (Pengirim)</label>
+            <input type="text" id="inpFrom" placeholder="Contoh: Agim">
+        </div>
+        
+        <div class="form-group">
+            <label>Pesan Pribadi Tambahan</label>
+            <input type="text" id="inpMsg" placeholder="Contoh: Aku sayang kamu selamanya...">
+        </div>
+        
+        <div class="form-group">
+            <label>Link Foto (Opsional)</label>
+            <input type="text" id="inpPhoto" placeholder="https://contoh.com/foto.jpg">
+            <span class="note">*Harus berupa link langsung ke gambar (.jpg/.png)</span>
+        </div>
+        
+        <div class="form-group">
+            <label>Link Musik MP3 (Opsional)</label>
+            <input type="text" id="inpMusic" placeholder="https://contoh.com/lagu.mp3">
+            <span class="note">*Harus berupa link langsung ke file musik (.mp3)</span>
+        </div>
+        
+        <button class="btn" onclick="generateLink()">Buat Link Rahasia ✨</button>
+        
+        <div class="result-box" id="resultBox">
+            <label>Ini Link Kamu (Copy & Kirim ke dia!):</label>
+            <div class="result-link" id="resultLink"></div>
+            <button class="btn btn-copy" onclick="copyLink()">📋 Copy Link</button>
+            <button class="btn" style="background:#fff; color:#ff4d6d; border: 2px solid #ff4d6d;" onclick="testLink()">👀 Test Buka Link</button>
+        </div>
+    </div>
+
+    <script>
+        let generatedUrl = '';
+        
+        function generateLink() {
+            const to = document.getElementById('inpTo').value.trim();
+            const from = document.getElementById('inpFrom').value.trim();
+            const msg = document.getElementById('inpMsg').value.trim();
+            const photo = document.getElementById('inpPhoto').value.trim();
+            const music = document.getElementById('inpMusic').value.trim();
+            
+            // Dapatkan base url tempat setup.html berada
+            let baseUrl = window.location.href.split('?')[0].replace('setup.html', '').replace(/\/$/, '') + '/index.html';
+            
+            // Fallback jika baseUrl jadi aneh
+            if (!baseUrl.includes('index.html')) {
+                const parts = window.location.href.split('?')[0].split('/');
+                parts.pop();
+                baseUrl = parts.join('/') + '/index.html';
+            }
+            
+            const params = new URLSearchParams();
+            if (to) params.append('to', to);
+            if (from) params.append('from', from);
+            if (msg) params.append('msg', msg);
+            if (photo) params.append('photo', photo);
+            if (music) params.append('music', music);
+            
+            const queryString = params.toString();
+            generatedUrl = queryString ? `${baseUrl}?${queryString}` : baseUrl;
+            
+            document.getElementById('resultLink').innerText = generatedUrl;
+            document.getElementById('resultBox').style.display = 'block';
+        }
+        
+        function copyLink() {
+            navigator.clipboard.writeText(generatedUrl).then(() => {
+                alert("Link berhasil di-copy! Silakan paste di WhatsApp/Chat.");
+            }).catch(err => {
+                // Fallback copy
+                const el = document.createElement('textarea');
+                el.value = generatedUrl;
+                document.body.appendChild(el);
+                el.select();
+                document.execCommand('copy');
+                document.body.removeChild(el);
+                alert("Link berhasil di-copy! Silakan paste di WhatsApp/Chat.");
+            });
+        }
+        
+        function testLink() {
+            if (generatedUrl) {
+                window.open(generatedUrl, '_blank');
+            }
+        }
+    </script>
+</body>
+</html>
