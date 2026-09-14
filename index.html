@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Satu Pertanyaan Untukmu ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #ff4d6d;
+            --bg-gradient: linear-gradient(135deg, #ffb3c6, #ff8fa3, #ff4d6d);
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            overflow: hidden;
+            color: #333;
+        }
+
+        /* Floating Hearts Background */
+        .bg-hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bg-heart {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.6);
+            animation: floatup linear infinite;
+        }
+
+        @keyframes floatup {
+            0% { transform: translateY(100vh) scale(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1.2) rotate(45deg); opacity: 0; }
+        }
+
+        /* Glassmorphism Container */
+        .container {
+            position: relative;
+            z-index: 10;
+            width: 90%;
+            max-width: 500px;
+            margin: 10vh auto;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 8px 32px 0 rgba(255, 100, 150, 0.37);
+            transition: all 0.5s ease-in-out;
+            max-height: 80vh;
+            overflow-y: auto;
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        
+        .container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .screen {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .screen.active {
+            display: block;
+            opacity: 1;
+        }
+
+        h1, h2 {
+            font-family: 'Dancing Script', cursive;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 77, 109, 0.8);
+            line-height: 1.2;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            margin-top: 0;
+        }
+
+        p {
+            font-size: 1.1rem;
+            color: #fff;
+            margin-bottom: 25px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        /* Buttons */
+        .btn {
+            background: #fff;
+            color: var(--primary-color);
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            margin: 10px;
+            font-family: 'Poppins', sans-serif;
+            position: relative;
+            z-index: 20;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.7);
+            background: #ffe6ea;
+        }
+
+        /* Reject Button Area */
+        .action-buttons {
+            position: relative;
+            width: 100%;
+            height: 200px; /* Ruang agar tombol tolak bisa kabur dengan bebas */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn-mau {
+            position: relative;
+            z-index: 30;
+        }
+
+        .btn-reject {
+            background: #f8f9fa;
+            color: #6c757d;
+            position: relative;
+            /* Menggunakan transform untuk animasi yang lebih smooth (hardware accelerated) tanpa lag */
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease, background 0.3s ease;
+            z-index: 30;
+        }
+
+        /* Variables for Customization */
+        .photo-container {
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 5px solid #fff;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+            display: none; 
+        }
+
+        .photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .funny-text {
+            color: #fff;
+            font-weight: 600;
+            margin-top: 15px;
+            min-height: 24px;
+            font-style: italic;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        /* Confetti & Hearts Success */
+        .success-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 100;
+            display: none;
+        }
+
+        /* Audio controls */
+        .audio-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 50;
+            background: rgba(255,255,255,0.4);
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            font-size: 1.2rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+        
+        .audio-controls:hover {
+            background: rgba(255,255,255,0.8);
+            transform: scale(1.1);
+        }
+
+        #hugMessage {
+            font-size: 1.5rem;
+            color: #fff;
+            font-weight: bold;
+            text-shadow: 0 0 15px #ff4d6d;
+            margin-top: 20px;
+            display: none;
+            animation: pulse 1s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
+        /* Pure CSS Animations for Performance */
+        @keyframes fallConfetti {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+        }
+
+        .confetti-piece {
+            position: fixed;
+            top: -10vh;
+            z-index: 100;
+            pointer-events: none;
+            will-change: transform;
+        }
+
+        @keyframes flyHug {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)) scale(var(--s)); opacity: 0; }
+        }
+
+        .hug-heart {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            z-index: 1000;
+            pointer-events: none;
+            will-change: transform;
+            animation: flyHug 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            h1 { font-size: 2.2rem; }
+            .btn { font-size: 1rem; padding: 10px 20px; }
+            .container { padding: 30px 20px; }
+            .action-buttons { height: 160px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================== -->
+    <!-- BAGIAN YANG BISA DIEDIT / DISESUAIKAN          -->
+    <!-- ============================================== -->
+    <script>
+        // Data Pribadi Kalian
+        const NAMA_DIA = "Aneyy"; 
+        const TANGGAL_MULAI_SUKA = "pertama kali kita bertemu";
+        const FOTO_KAMI = "https://images.unsplash.com/photo-1518199266791-5375a83190b7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"; // Ganti dengan URL foto kalian
+        const PESAN_PRIBADI = "Aku sadar bahwa hal terbaik dalam hidupku adalah saat bersamamu.";
+        const NAMA_KAMU = "Agim";
+    </script>
+    
+    <!-- Lagu Romantis -->
+    <!-- Ganti src dengan link lagu mp3 romantis pilihanmu -->
+    <audio id="bgMusic" loop>
+        <source src="https://assets.mixkit.co/music/preview/mixkit-romantic-acoustic-guitar-249.mp3" type="audio/mpeg">
+    </audio>
+    <!-- ============================================== -->
+
+    <div class="audio-controls" onclick="toggleMusic()" title="Play/Pause Music">
+        🎵
+    </div>
+
+    <!-- Floating Background Hearts -->
+    <div class="bg-hearts" id="bgHearts"></div>
+
+    <div class="container">
+        
+        <!-- SCREEN 1: Intro -->
+        <div id="screen1" class="screen active">
+            <h1>Hai, <span id="namaDia1"></span> ❤️</h1>
+            <p>Sebenarnya sudah lama aku ingin mengatakan ini... tepatnya sejak <span id="tanggalSuka"></span>.</p>
+            <p style="font-weight: 600; font-size: 1.2rem;">Aku punya satu pertanyaan penting buat kamu.</p>
+            <button class="btn" onclick="nextScreen(2)">Lanjut ❤️</button>
+        </div>
+
+        <!-- SCREEN 2: Question -->
+        <div id="screen2" class="screen">
+            <h1>Maukah kamu menjadi pacarku? ❤️</h1>
+            
+            <div class="action-buttons" id="actionButtons">
+                <button class="btn btn-mau" onclick="nextScreen(3)">MAU ❤️</button>
+                <button class="btn btn-reject" id="btnReject" onclick="moveButton(event)">TOLAK 😜</button>
+            </div>
+            <div class="funny-text" id="funnyText"></div>
+        </div>
+
+        <!-- SCREEN 3: Success -->
+        <div id="screen3" class="screen">
+            <div class="photo-container" id="photoBox">
+                <img id="fotoKami" src="" alt="Foto Kita">
+            </div>
+            
+            <h1>YEEEEAY! ❤️🥰</h1>
+            <p style="font-weight: 600; font-size: 1.2rem;">Mulai hari ini, kamu resmi menjadi orang yang paling aku sayang, <span id="namaDia2"></span>.</p>
+            
+            <p style="font-style: italic;">"<span id="pesanPribadi"></span>"<br><br>Terima kasih sudah memilih aku. Aku janji akan selalu berusaha membuatmu tersenyum.<br><br>~ <span id="namaKamu"></span></p>
+            
+            <button class="btn" onclick="sendHugs()">Peluk jauh 🤗</button>
+            <div id="hugMessage">Sending unlimited hugs... ❤️❤️❤️</div>
+        </div>
+
+    </div>
+
+    <!-- Container for Confetti -->
+    <div id="confettiContainer" class="success-overlay"></div>
+
+    <script>
+        // Apply customizations to HTML
+        document.getElementById('namaDia1').innerText = NAMA_DIA;
+        document.getElementById('namaDia2').innerText = NAMA_DIA;
+        document.getElementById('tanggalSuka').innerText = TANGGAL_MULAI_SUKA;
+        document.getElementById('fotoKami').src = FOTO_KAMI;
+        document.getElementById('pesanPribadi').innerText = PESAN_PRIBADI;
+        document.getElementById('namaKamu').innerText = NAMA_KAMU;
+
+        // Customization Texts for Reject Button
+        const funnyTexts = [
+            "Eits, jangan itu 😭",
+            "Yakin mau nolak?",
+            "Coba pikir lagi 🥺",
+            "Tombolnya malu 😳",
+            "Jawabannya sebenarnya MAU kan? ❤️",
+            "Hehehe, hampir dapat 😜",
+            "Ayolah, klik MAU aja 😘",
+            "Gak kena wleee 😛",
+            "Usaha terusss! Tapi mending klik MAU 😂"
+        ];
+        
+        let attempt = 0;
+        let isMusicPlaying = false;
+        const bgMusic = document.getElementById('bgMusic');
+        let btnPositionFixed = false; // Flag to track if button is absolutely positioned
+
+        // Create Floating Background Hearts
+        function createHearts() {
+            const container = document.getElementById('bgHearts');
+            const heartsCount = 25;
+            const symbols = ['❤️', '💖', '💕', '🌸', '✨'];
+            
+            for (let i = 0; i < heartsCount; i++) {
+                let heart = document.createElement('div');
+                heart.className = 'bg-heart';
+                heart.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 8 + 5) + 's';
+                heart.style.animationDelay = (Math.random() * 5) + 's';
+                heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                container.appendChild(heart);
+            }
+        }
+        createHearts();
+
+        // Screen Navigation
+        function nextScreen(screenNum) {
+            document.querySelectorAll('.screen').forEach(s => {
+                s.classList.remove('active');
+                setTimeout(() => s.style.display = 'none', 500);
+            });
+            
+            setTimeout(() => {
+                const next = document.getElementById('screen' + screenNum);
+                next.style.display = 'block';
+                // Trigger reflow
+                void next.offsetWidth;
+                next.classList.add('active');
+                
+                if (screenNum === 3) {
+                    document.getElementById('photoBox').style.display = 'block';
+                    startSuccessAnimation();
+                    if(!isMusicPlaying) toggleMusic(); // Auto play music on success if not playing
+                }
+            }, 500);
+            
+            // Try to play music on first interaction (Lanjut button)
+            if (screenNum === 2 && !isMusicPlaying) {
+                toggleMusic();
+            }
+        }
+
+        // Runaway Button Logic
+        function moveButton(e) {
+            if (e) e.preventDefault(); // Mencegah double tap di HP
+            
+            const btn = document.getElementById('btnReject');
+            const container = document.getElementById('actionButtons');
+            const funnyText = document.getElementById('funnyText');
+            
+            // Posisi tombol dari layout awal
+            const originalLeft = btn.offsetLeft;
+            const originalTop = btn.offsetTop;
+            
+            // Rentang pergerakan berdasarkan ukuran container dan offset posisi
+            const maxMoveLeft = -originalLeft + 10; // +10px padding
+            const maxMoveRight = container.offsetWidth - originalLeft - btn.offsetWidth - 10;
+            const maxMoveTop = -originalTop + 10;
+            const maxMoveBottom = container.offsetHeight - originalTop - btn.offsetHeight - 10;
+            
+            // Posisi acak baru
+            const moveX = maxMoveLeft + Math.random() * (maxMoveRight - maxMoveLeft);
+            const moveY = maxMoveTop + Math.random() * (maxMoveBottom - maxMoveTop);
+            
+            // Kecepatan animasi (semakin sering diklik, semakin cepat)
+            const transitionSpeed = Math.max(0.15, 0.35 - (attempt * 0.03));
+            btn.style.transition = `transform ${transitionSpeed}s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease, background 0.3s ease`;
+            
+            // Gunakan transform (GPU acceleration) agar sangat smooth tanpa lag/reflow
+            btn.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            
+            funnyText.innerText = funnyTexts[attempt % funnyTexts.length];
+            attempt++;
+        }
+
+        // Audio Control
+        function toggleMusic() {
+            if (isMusicPlaying) {
+                bgMusic.pause();
+                isMusicPlaying = false;
+            } else {
+                bgMusic.play().then(() => {
+                    isMusicPlaying = true;
+                }).catch(e => {
+                    console.log("Audio autoplay require interaction.");
+                    isMusicPlaying = false;
+                });
+            }
+        }
+
+        // Virtual Hugs (Pure CSS Animation)
+        function sendHugs() {
+            const msg = document.getElementById('hugMessage');
+            msg.style.display = 'block';
+            
+            // Menggunakan pure CSS animation agar hardware accelerated (GPU) dan sangat smooth
+            for(let i=0; i<20; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'hug-heart';
+                    heart.innerText = ['❤️', '💖', '🥰'][Math.floor(Math.random()*3)];
+                    heart.style.fontSize = (Math.random() * 30 + 40) + 'px';
+                    
+                    const angle = Math.random() * Math.PI * 2;
+                    const dist = Math.random() * (window.innerWidth/2) + 50;
+                    
+                    // Menggunakan CSS Variables untuk mengirim posisi akhir ke keyframes
+                    heart.style.setProperty('--tx', `calc(-50% + ${Math.cos(angle)*dist}px)`);
+                    heart.style.setProperty('--ty', `calc(-50% + ${Math.sin(angle)*dist}px)`);
+                    heart.style.setProperty('--s', Math.random() + 0.5);
+                    
+                    document.body.appendChild(heart);
+                    
+                    // Hapus elemen setelah animasi selesai
+                    setTimeout(() => heart.remove(), 1600);
+                }, i * 100);
+            }
+        }
+
+        // Confetti Animation (Pure CSS implementation - Sangat Smooth)
+        function startSuccessAnimation() {
+            const container = document.getElementById('confettiContainer');
+            container.style.display = 'block';
+            
+            const colors = ['#ff4d6d', '#ffb3c6', '#ffffff', '#ff8fa3', '#ffc2d1'];
+            const piecesCount = 80; // Dikurangi sedikit agar lebih ringan, tapi karena infinite akan terlihat terus ada
+
+            for (let i = 0; i < piecesCount; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'confetti-piece';
+                
+                // Pengaturan random untuk setiap potongan
+                const left = Math.random() * 100; // posisi horizontal %
+                const delay = Math.random() * 3; // delay mulai jatuh
+                const duration = Math.random() * 2.5 + 2; // durasi jatuh
+                
+                piece.style.left = left + 'vw';
+                piece.style.animation = `fallConfetti ${duration}s linear ${delay}s infinite`;
+                
+                if (Math.random() > 0.4) { // 60% chance to be a heart
+                    piece.innerText = '❤️';
+                    piece.style.fontSize = (Math.random() * 10 + 15) + 'px';
+                } else {
+                    piece.style.width = (Math.random() * 8 + 6) + 'px';
+                    piece.style.height = piece.style.width;
+                    piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                }
+                
+                container.appendChild(piece);
+            }
+        }
+    </script>
+</body>
+</html>
