@@ -285,11 +285,34 @@
         }
 
         /* Responsive adjustments */
-        @media (max-width: 480px) {
-            h1 { font-size: 2.2rem; }
-            .btn { font-size: 1rem; padding: 10px 20px; }
-            .container { padding: 30px 20px; }
-            .action-buttons { height: 160px; }
+        @media (max-width: 600px) {
+            h1 { font-size: 2rem; margin-bottom: 10px; }
+            p { font-size: 0.95rem; margin-bottom: 15px; }
+            .btn { font-size: 0.95rem; padding: 10px 22px; margin: 5px; }
+            .container { 
+                padding: 25px 20px; 
+                margin: 5vh auto; 
+                width: 85%;
+                max-height: 85vh;
+            }
+            .action-buttons { 
+                height: 160px; 
+                gap: 10px; 
+                flex-direction: column;
+            }
+            .photo-container { 
+                width: 120px; 
+                height: 120px; 
+            }
+            #hugMessage { 
+                font-size: 1.1rem; 
+            }
+        }
+
+        @media (max-width: 360px) {
+            h1 { font-size: 1.6rem; }
+            .btn { width: 90%; max-width: 200px; }
+            .action-buttons { height: 180px; }
         }
     </style>
 </head>
@@ -297,8 +320,8 @@
 
     <!-- Splash Screen (Pintu Masuk) -->
     <div id="splashScreen" onclick="startExperience()">
-        <h2 style="font-family: 'Poppins', sans-serif; font-size: 1.5rem; text-shadow: none;">Ada pesan untukmu... 💌</h2>
-        <p style="font-size: 0.9rem; text-shadow: none;">(Ketuk layar untuk membuka)</p>
+        <h2 style="font-family: 'Poppins', sans-serif; font-size: 1.5rem; text-shadow: none; text-align: center; padding: 0 20px;">Ada pesan untukmu... 💌</h2>
+        <p style="font-size: 0.9rem; text-shadow: none; text-align: center;">(Ketuk layar untuk membuka)</p>
     </div>
 
     <!-- ============================================== -->
